@@ -2,20 +2,26 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import ejs from 'ejs';
 import { fileURLToPath } from 'node:url';
-import type { GenerateOptions } from './index.js';
+import type { GeneratorConfig } from '../types.js';
 import { logger } from '../utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Get templates directory - when bundled, __dirname is the dist folder
+// Templates are at the same level as dist (../templates from dist)
+function getTemplatesDir(templateName: string): string {
+  return path.resolve(__dirname, '../templates', templateName);
+}
+
 export async function generateMonorepo(
   targetDir: string,
-  options: GenerateOptions
+  options: GeneratorConfig
 ): Promise<void> {
   logger.info('Generating monorepo structure...');
 
   // Get templates directory path
-  const templatesDir = path.resolve(__dirname, '../../templates/base-monorepo');
+  const templatesDir = getTemplatesDir('base-monorepo');
 
   // Ensure target directory exists
   await fs.ensureDir(targetDir);

@@ -1,18 +1,14 @@
 import * as p from '@clack/prompts';
+import type { Features } from '../types.js';
 
-export interface Features {
-  stateManagement: boolean;
-  designSystem: boolean;
-  githubActions: boolean;
-  docker: boolean;
-}
+export type { Features };
 
 export async function featuresPrompt(): Promise<Features | symbol> {
   const selectedFeatures = await p.multiselect({
     message: 'Which features would you like to include?',
     options: [
       {
-        value: 'stateManagement',
+        value: 'sharedState',
         label: 'Shared State Management',
         hint: 'Cross-MFE state sharing',
       },
@@ -41,7 +37,7 @@ export async function featuresPrompt(): Promise<Features | symbol> {
   }
 
   return {
-    stateManagement: selectedFeatures.includes('stateManagement'),
+    sharedState: selectedFeatures.includes('sharedState'),
     designSystem: selectedFeatures.includes('designSystem'),
     githubActions: selectedFeatures.includes('githubActions'),
     docker: selectedFeatures.includes('docker'),

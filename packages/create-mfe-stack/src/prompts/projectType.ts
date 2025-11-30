@@ -1,6 +1,7 @@
 import * as p from '@clack/prompts';
+import type { ProjectType } from '../types.js';
 
-export type ProjectType = 'complete' | 'shell' | 'remote';
+export type { ProjectType };
 
 export async function projectTypePrompt(): Promise<ProjectType | symbol> {
   return p.select({

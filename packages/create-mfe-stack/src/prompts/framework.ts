@@ -1,6 +1,7 @@
 import * as p from '@clack/prompts';
+import type { Framework } from '../types.js';
 
-export type Framework = 'react' | 'vue';
+export type { Framework };
 
 export async function frameworkPrompt(): Promise<Framework | symbol> {
   return p.select({

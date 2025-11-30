@@ -1,17 +1,13 @@
 import path from 'node:path';
 import fs from 'fs-extra';
 import ejs from 'ejs';
+import type { Features } from '../types.js';
 
 export interface TemplateData {
   projectName: string;
   appName: string;
   port: number;
-  features: {
-    stateManagement: boolean;
-    designSystem: boolean;
-    githubActions: boolean;
-    docker: boolean;
-  };
+  features: Features;
 }
 
 export async function copyTemplateDir(

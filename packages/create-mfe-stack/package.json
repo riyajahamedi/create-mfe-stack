@@ -13,7 +13,16 @@
     "monorepo"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "riyajahamedi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riyajahamedi/create-mfe-stack.git",
+    "directory": "packages/create-mfe-stack"
+  },
+  "homepage": "https://github.com/riyajahamedi/create-mfe-stack#readme",
+  "bugs": {
+    "url": "https://github.com/riyajahamedi/create-mfe-stack/issues"
+  },
   "type": "module",
   "exports": {
     ".": {
