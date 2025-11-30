@@ -5,20 +5,16 @@
  * This package provides CLI commands for development, building,
  * and managing micro-frontend projects.
  *
- * @packageDocumentation
- */
-
-/**
- * Placeholder for future implementation.
- * Phase 2 will include:
+ * Commands:
  * - mfe dev - Start all MFEs in development mode
  * - mfe build - Build all MFEs for production
  * - mfe add - Add a new remote application
  * - mfe graph - Visualize MFE dependencies
+ * - mfe deps - Manage shared dependencies
+ *
+ * @packageDocumentation
  */
 
-export const version = '0.1.0';
+import { run } from './cli.js';
 
-export function placeholder(): string {
-  return 'Coming soon in Phase 2';
-}
+run();
