@@ -119,11 +119,25 @@ export const depsCommand = new Command('deps')
       if (conflicts.length > 0) {
         console.log('  Suggested versions (latest from each conflict):');
         for (const conflict of conflicts) {
-          // Sort versions and suggest the highest one
+          // Sort versions using semver-aware comparison
+          // Clean up version strings (remove ^, ~, etc.) for comparison
           const sortedVersions = conflict.versions
             .map((v) => v.version)
-            .sort()
-            .reverse();
+            .sort((a, b) => {
+              const cleanA = a.replace(/^[\^~>=<]+/, '');
+              const cleanB = b.replace(/^[\^~>=<]+/, '');
+              const partsA = cleanA.split('.').map((p) => parseInt(p) || 0);
+              const partsB = cleanB.split('.').map((p) => parseInt(p) || 0);
+              
+              for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+                const numA = partsA[i] || 0;
+                const numB = partsB[i] || 0;
+                if (numA !== numB) {
+                  return numB - numA; // Descending order (highest first)
+                }
+              }
+              return 0;
+            });
           console.log(pc.cyan(`    ${conflict.name}: ${sortedVersions[0]}`));
         }
         console.log();

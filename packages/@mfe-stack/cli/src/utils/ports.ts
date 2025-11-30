@@ -1,15 +1,23 @@
-import { execa } from 'execa';
+import { createServer } from 'net';
 
 /**
- * Check if a port is available
+ * Check if a port is available using a cross-platform approach
  */
 export async function isPortAvailable(port: number): Promise<boolean> {
-  try {
-    await execa('lsof', ['-i', `:${port}`]);
-    return false; // Port is in use
-  } catch {
-    return true; // Port is available
-  }
+  return new Promise((resolve) => {
+    const server = createServer();
+    
+    server.once('error', () => {
+      resolve(false); // Port is in use
+    });
+    
+    server.once('listening', () => {
+      server.close();
+      resolve(true); // Port is available
+    });
+    
+    server.listen(port, '127.0.0.1');
+  });
 }
 
 /**
