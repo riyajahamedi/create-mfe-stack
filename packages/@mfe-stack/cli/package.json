@@ -1,16 +1,21 @@
 {
   "name": "@mfe-stack/cli",
   "version": "0.1.0",
-  "description": "Development commands for micro-frontend applications",
+  "description": "Development CLI for micro-frontend projects",
   "keywords": [
     "micro-frontend",
     "mfe",
     "cli",
-    "dev-tools"
+    "dev-tools",
+    "module-federation"
   ],
   "license": "MIT",
   "author": "",
   "type": "module",
+  "bin": {
+    "mfe": "./dist/index.js",
+    "mfe-stack": "./dist/index.js"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -23,12 +28,23 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "@clack/prompts": "^0.8.2",
+    "picocolors": "^1.1.1",
+    "execa": "^9.5.1",
+    "find-up": "^7.0.0",
+    "fs-extra": "^11.2.0"
+  },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.16",
+    "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
   "engines": {

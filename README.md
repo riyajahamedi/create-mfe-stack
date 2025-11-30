@@ -88,7 +88,7 @@ The interactive wizard will guide you through:
 - [x] Phase 1: CLI scaffolding with React templates
 - [x] Phase 2: Vue templates
 - [x] Phase 3: Runtime orchestration package (@mfe-stack/core)
-- [ ] Phase 4: Dev commands (@mfe-stack/cli)
+- [x] Phase 4: Dev commands (@mfe-stack/cli)
 - [ ] Phase 5: Design system starter
 - [ ] Phase 6: State management integration
 - [ ] Phase 7: Plugin system
