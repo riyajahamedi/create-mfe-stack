@@ -1,0 +1,56 @@
+{
+  "name": "create-mfe-stack",
+  "version": "0.1.0",
+  "description": "CLI to scaffold production-ready micro-frontend architectures",
+  "keywords": [
+    "micro-frontend",
+    "mfe",
+    "module-federation",
+    "cli",
+    "scaffold",
+    "react",
+    "vue",
+    "monorepo"
+  ],
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bin": {
+    "create-mfe-stack": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "commander": "^12.1.0",
+    "ejs": "^3.1.10",
+    "fs-extra": "^11.2.0",
+    "picocolors": "^1.1.1",
+    "validate-npm-package-name": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.16",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
