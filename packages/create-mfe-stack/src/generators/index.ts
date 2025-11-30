@@ -5,10 +5,19 @@ import { generateMonorepo } from './monorepo.js';
 import { generateShell } from './shell.js';
 import { generateRemote } from './remote.js';
 import { logger } from '../utils/logger.js';
-import { getInstallCommand } from '../utils/package-manager.js';
-import type { GeneratorConfig } from '../types.js';
+import { getInstallCommand, getRunCommand } from '../utils/package-manager.js';
+import type { GeneratorConfig, PackageManager } from '../types.js';
 
 export type { GeneratorConfig };
+
+// Validate package manager is one of the allowed values
+function validatePackageManager(pm: PackageManager): PackageManager {
+  const allowed: PackageManager[] = ['pnpm', 'npm', 'yarn'];
+  if (!allowed.includes(pm)) {
+    throw new Error(`Invalid package manager: ${pm}`);
+  }
+  return pm;
+}
 
 export async function generateProject(options: GeneratorConfig): Promise<void> {
   const targetDir = path.resolve(process.cwd(), options.projectName);
@@ -69,6 +78,11 @@ async function generateGitHubActions(
   const workflowDir = path.join(targetDir, '.github', 'workflows');
   await fs.ensureDir(workflowDir);
 
+  const pm = validatePackageManager(options.packageManager);
+  const installCmd = getInstallCommand(pm);
+  const lintCmd = getRunCommand(pm, 'lint');
+  const buildCmd = getRunCommand(pm, 'build');
+
   const ciContent = `name: CI
 
 on:
@@ -88,20 +102,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-${options.packageManager === 'pnpm' ? `
+${pm === 'pnpm' ? `
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9
 ` : ''}
       - name: Install dependencies
-        run: ${getInstallCommand(options.packageManager)}
+        run: ${installCmd}
 
       - name: Lint
-        run: ${options.packageManager === 'npm' ? 'npm run' : options.packageManager} lint
+        run: ${lintCmd}
 
       - name: Build
-        run: ${options.packageManager === 'npm' ? 'npm run' : options.packageManager} build
+        run: ${buildCmd}
 `;
 
   await fs.writeFile(path.join(workflowDir, 'ci.yml'), ciContent);
@@ -113,27 +127,31 @@ async function generateDocker(
 ): Promise<void> {
   logger.info('Generating Docker configuration...');
 
+  const pm = validatePackageManager(options.packageManager);
+  const installCmd = getInstallCommand(pm);
+  const buildCmd = getRunCommand(pm, 'build');
+
   const dockerfileContent = `# Build stage
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Install pnpm if needed
-${options.packageManager === 'pnpm' ? 'RUN npm install -g pnpm' : ''}
+${pm === 'pnpm' ? 'RUN npm install -g pnpm' : ''}
 
 # Copy package files
 COPY package*.json ./
-${options.packageManager === 'pnpm' ? 'COPY pnpm-lock.yaml ./' : ''}
-${options.packageManager === 'yarn' ? 'COPY yarn.lock ./' : ''}
+${pm === 'pnpm' ? 'COPY pnpm-lock.yaml ./' : ''}
+${pm === 'yarn' ? 'COPY yarn.lock ./' : ''}
 
 # Install dependencies
-RUN ${getInstallCommand(options.packageManager)}
+RUN ${installCmd}
 
 # Copy source files
 COPY . .
 
 # Build the application
-RUN ${options.packageManager === 'npm' ? 'npm run' : options.packageManager} build
+RUN ${buildCmd}
 
 # Production stage
 FROM nginx:alpine
