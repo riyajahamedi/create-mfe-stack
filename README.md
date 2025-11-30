@@ -86,7 +86,7 @@ The interactive wizard will guide you through:
 ## 🗺️ Roadmap
 
 - [x] Phase 1: CLI scaffolding with React templates
-- [ ] Phase 2: Vue templates
+- [x] Phase 2: Vue templates
 - [ ] Phase 3: Runtime orchestration package (@mfe-stack/core)
 - [ ] Phase 4: Dev commands (@mfe-stack/cli)
 - [ ] Phase 5: Design system starter
