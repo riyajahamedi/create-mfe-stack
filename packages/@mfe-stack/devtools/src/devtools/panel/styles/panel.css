@@ -1,0 +1,399 @@
+/**
+ * Dark theme CSS for MFE Stack DevTools panel.
+ * Matches Chrome DevTools styling.
+ */
+
+:root {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --bg-tertiary: #2d2d2d;
+  --bg-hover: #3e3e42;
+  --bg-active: #094771;
+  --text-primary: #cccccc;
+  --text-secondary: #9d9d9d;
+  --text-muted: #6d6d6d;
+  --border-color: #3c3c3c;
+  --accent-blue: #0e639c;
+  --accent-green: #4ec9b0;
+  --accent-yellow: #dcdcaa;
+  --accent-orange: #ce9178;
+  --accent-purple: #c586c0;
+  --accent-red: #f14c4c;
+  --font-family: Consolas, 'Courier New', monospace;
+  --font-size: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tab Navigation */
+.tab-bar {
+  display: flex;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-hover);
+}
+
+.tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-blue);
+}
+
+/* Panel Content */
+.panel-content {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+}
+
+/* No Hook Message */
+.no-hook {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  text-align: center;
+  gap: 12px;
+}
+
+.no-hook-title {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.no-hook-hint {
+  font-size: 11px;
+  max-width: 300px;
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 8px;
+}
+
+.section-count {
+  background-color: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* MFE Graph */
+.mfe-graph {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mfe-node {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.mfe-node-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mfe-node-name {
+  font-weight: 600;
+  color: var(--accent-green);
+}
+
+.mfe-node-type {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: var(--accent-blue);
+  color: white;
+}
+
+.mfe-node-connections {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* State Inspector */
+.state-inspector {
+  font-family: var(--font-family);
+}
+
+.bridge-item {
+  margin-bottom: 16px;
+}
+
+.bridge-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+}
+
+.bridge-header:hover {
+  background-color: var(--bg-hover);
+}
+
+.bridge-name {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.bridge-toggle {
+  color: var(--text-muted);
+  width: 16px;
+  text-align: center;
+}
+
+.bridge-state {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 8px;
+  overflow-x: auto;
+}
+
+/* JSON Tree */
+.json-tree {
+  font-family: var(--font-family);
+}
+
+.json-key {
+  color: var(--accent-purple);
+}
+
+.json-string {
+  color: var(--accent-orange);
+}
+
+.json-number {
+  color: var(--accent-green);
+}
+
+.json-boolean {
+  color: var(--accent-blue);
+}
+
+.json-null {
+  color: var(--text-muted);
+}
+
+.json-bracket {
+  color: var(--text-secondary);
+}
+
+.json-indent {
+  display: inline-block;
+  width: 16px;
+}
+
+.json-line {
+  padding: 1px 0;
+}
+
+.json-expandable {
+  cursor: pointer;
+}
+
+.json-expandable:hover {
+  background-color: var(--bg-hover);
+}
+
+/* Event Log */
+.event-log {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-item {
+  display: flex;
+  gap: 8px;
+  padding: 6px 8px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.event-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.event-timestamp {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.event-type {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.event-type.state-change {
+  background-color: var(--accent-blue);
+  color: white;
+}
+
+.event-type.action {
+  background-color: var(--accent-purple);
+  color: white;
+}
+
+.event-type.event {
+  background-color: var(--accent-yellow);
+  color: var(--bg-primary);
+}
+
+.event-namespace {
+  color: var(--accent-green);
+}
+
+.event-name {
+  color: var(--text-primary);
+}
+
+.event-payload {
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-log-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px;
+}
+
+/* Remote List */
+.remote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.remote-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.remote-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.remote-status.loaded {
+  background-color: var(--accent-green);
+}
+
+.remote-status.pending {
+  background-color: var(--accent-yellow);
+}
+
+.remote-status.error {
+  background-color: var(--accent-red);
+}
+
+.remote-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.remote-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.remote-url {
+  color: var(--text-muted);
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.remote-list-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-hover);
+}

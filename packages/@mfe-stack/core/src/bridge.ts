@@ -3,6 +3,7 @@
  */
 
 import { z } from 'zod';
+import { getDevtoolsHook } from './devtools.js';
 
 export interface BridgeConfig<T extends z.ZodType> {
   /**
@@ -146,6 +147,18 @@ export function createBridge<T extends z.ZodType>(
   const actionHandlers = new Map<string, Set<(payload: unknown) => void>>();
 
   let isDestroyed = false;
+  let actionCount = 0;
+
+  // Register with devtools if available
+  const devtools = getDevtoolsHook();
+  let unregisterFromDevtools: (() => void) | null = null;
+  if (devtools) {
+    unregisterFromDevtools = devtools._internal.registerBridge({
+      namespace,
+      getState: () => state,
+      actionCount: 0,
+    });
+  }
 
   function checkDestroyed(): void {
     if (isDestroyed) {
@@ -205,6 +218,11 @@ export function createBridge<T extends z.ZodType>(
         }
       }
     }
+
+    // Notify devtools of state change
+    if (devtools) {
+      devtools._internal.notifyStateChange(namespace, state, prevState);
+    }
   }
 
   function subscribe(listener: (state: State, prevState: State) => void): () => void {
@@ -239,6 +257,13 @@ export function createBridge<T extends z.ZodType>(
 
   function dispatch<A extends string>(action: A, payload?: unknown): void {
     checkDestroyed();
+
+    // Track action count and notify devtools
+    actionCount++;
+    if (devtools) {
+      devtools._internal.incrementActionCount(namespace);
+      devtools._internal.notifyAction(namespace, action, payload);
+    }
 
     const handlers = actionHandlers.get(action);
     if (handlers) {
@@ -280,6 +305,12 @@ export function createBridge<T extends z.ZodType>(
     stateListeners.clear();
     keyListeners.clear();
     actionHandlers.clear();
+
+    // Unregister from devtools
+    if (unregisterFromDevtools) {
+      unregisterFromDevtools();
+      unregisterFromDevtools = null;
+    }
   }
 
   return {

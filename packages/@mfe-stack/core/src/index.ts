@@ -11,5 +11,14 @@
 export { createBridge, type Bridge, type BridgeConfig } from './bridge.js';
 export { createStore, type Store, type StoreConfig } from './store.js';
 export { createEventBus, type EventBus } from './event-bus.js';
+export {
+  enableDevtools,
+  isDevtoolsActive,
+  getDevtoolsHook,
+  type MfeStackHook,
+  type DevtoolsBridgeInfo,
+  type DevtoolsEventLogEntry,
+  type DevtoolsRemoteInfo,
+} from './devtools.js';
 
 export const version = '0.1.0';
