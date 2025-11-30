@@ -5,6 +5,14 @@
  */
 
 /**
+ * Check if running in a browser environment.
+ * Used to prevent SSR errors when accessing window.
+ */
+function isBrowser(): boolean {
+  return typeof window !== 'undefined';
+}
+
+/**
  * Bridge info exposed to devtools
  */
 export interface DevtoolsBridgeInfo {
@@ -254,7 +262,7 @@ function createHook(): MfeStackHook {
  * ```
  */
 export function enableDevtools(): void {
-  if (typeof window === 'undefined') {
+  if (!isBrowser()) {
     return;
   }
 
@@ -270,14 +278,14 @@ export function enableDevtools(): void {
  * Check if devtools are enabled.
  */
 export function isDevtoolsActive(): boolean {
-  return isDevtoolsEnabled && typeof window !== 'undefined' && !!window.__MFE_STACK__;
+  return isDevtoolsEnabled && isBrowser() && !!window.__MFE_STACK__;
 }
 
 /**
  * Get the devtools hook if available.
  */
 export function getDevtoolsHook(): MfeStackHook | undefined {
-  if (typeof window === 'undefined') {
+  if (!isBrowser()) {
     return undefined;
   }
   return window.__MFE_STACK__;

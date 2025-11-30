@@ -145,6 +145,10 @@ function cleanup(): void {
   }
 }
 
+// Configuration for hook detection polling
+const HOOK_DETECTION_MAX_ATTEMPTS = 10;
+const HOOK_DETECTION_POLL_INTERVAL_MS = 500;
+
 /**
  * Check for MFE Stack hook and initialize if found.
  */
@@ -161,16 +165,15 @@ checkForHook();
 
 // Also poll a few times in case the hook is injected after page load
 let attempts = 0;
-const maxAttempts = 10;
 const pollInterval = setInterval(() => {
   attempts++;
-  if (window.__MFE_STACK__ || attempts >= maxAttempts) {
+  if (window.__MFE_STACK__ || attempts >= HOOK_DETECTION_MAX_ATTEMPTS) {
     clearInterval(pollInterval);
     if (window.__MFE_STACK__ && !port) {
       checkForHook();
     }
   }
-}, 500);
+}, HOOK_DETECTION_POLL_INTERVAL_MS);
 
 // Clean up on page unload
 window.addEventListener('beforeunload', () => {

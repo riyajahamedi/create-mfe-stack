@@ -5,6 +5,10 @@ interface EventLogProps {
   events: EventLogEntry[];
 }
 
+// Maximum length for payload display before truncation
+const MAX_PAYLOAD_DISPLAY_LENGTH = 50;
+const TRUNCATION_SUFFIX = '...';
+
 function formatTimestamp(timestamp: number): string {
   const date = new Date(timestamp);
   return date.toLocaleTimeString('en-US', {
@@ -19,8 +23,8 @@ function truncatePayload(payload: unknown): string {
   if (payload === undefined) return '';
   try {
     const str = JSON.stringify(payload);
-    if (str.length > 50) {
-      return str.substring(0, 47) + '...';
+    if (str.length > MAX_PAYLOAD_DISPLAY_LENGTH) {
+      return str.substring(0, MAX_PAYLOAD_DISPLAY_LENGTH - TRUNCATION_SUFFIX.length) + TRUNCATION_SUFFIX;
     }
     return str;
   } catch {
