@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { runPrompts } from './prompts/index.js';
 import { generateProject } from './generators/index.js';
 import { logger } from './utils/logger.js';
+import { getInstallCommand, getRunCommand } from './utils/package-manager.js';
 import pc from 'picocolors';
 
 const program = new Command();
@@ -36,14 +37,17 @@ program
         initGit: options.git !== false,
       });
 
+      const installCmd = getInstallCommand(answers.packageManager);
+      const devCmd = getRunCommand(answers.packageManager, 'dev');
+
       console.log();
       logger.success('Project created successfully!');
       console.log();
       console.log('  Next steps:');
       console.log();
       console.log(pc.cyan(`    cd ${answers.projectName}`));
-      console.log(pc.cyan('    pnpm install'));
-      console.log(pc.cyan('    pnpm dev'));
+      console.log(pc.cyan(`    ${installCmd}`));
+      console.log(pc.cyan(`    ${devCmd}`));
       console.log();
     } catch (error) {
       logger.error('Failed to create project');

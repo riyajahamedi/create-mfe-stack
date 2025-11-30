@@ -14,7 +14,9 @@
     "turbo": "^2.3.3",
     "typescript": "^5.3.3"
   },
-  "packageManager": "<%= packageManager %>@9.1.0",
+<% if (packageManager === 'pnpm') { -%>
+  "packageManager": "pnpm@9.1.0",
+<% } -%>
   "engines": {
     "node": ">=18.0.0"
   }
