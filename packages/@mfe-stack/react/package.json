@@ -1,12 +1,12 @@
 {
-  "name": "@mfe-stack/core",
+  "name": "@mfe-stack/react",
   "version": "0.1.0",
-  "description": "Type-safe state bridge for micro-frontend communication",
+  "description": "React hooks for @mfe-stack/core state bridge",
   "keywords": [
     "micro-frontend",
     "mfe",
-    "module-federation",
-    "runtime",
+    "react",
+    "hooks",
     "state-management"
   ],
   "license": "MIT",
@@ -27,20 +27,20 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "zod": "^3.23.8"
+    "@mfe-stack/core": "workspace:*"
   },
   "devDependencies": {
+    "@types/react": "^18.2.48",
+    "react": "^18.2.0",
     "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "vitest": "^2.1.0"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "zod": "^3.0.0"
+    "@mfe-stack/core": "^0.1.0",
+    "react": ">=17.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
