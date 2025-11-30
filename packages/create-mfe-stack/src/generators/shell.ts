@@ -1,6 +1,4 @@
 import path from 'node:path';
-import fs from 'fs-extra';
-import ejs from 'ejs';
 import { fileURLToPath } from 'node:url';
 import type { GenerateOptions } from './index.js';
 import { logger } from '../utils/logger.js';
