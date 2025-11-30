@@ -1,0 +1,57 @@
+# <%= projectName %>
+
+> A micro-frontend platform built with [create-mfe-stack](https://github.com/riyajahamedi/create-mfe-stack)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 18.0.0
+- <%= packageManager %> (package manager)
+
+### Installation
+
+```bash
+<%= packageManager %> install
+```
+
+### Development
+
+Start all applications in development mode:
+
+```bash
+<%= packageManager %> run dev
+```
+
+### Build
+
+Build all applications for production:
+
+```bash
+<%= packageManager %> run build
+```
+
+## Project Structure
+
+```
+<%= projectName %>/
+├── apps/
+│   ├── shell/          # Host application
+│   └── remote1/        # Remote micro-frontend
+├── packages/           # Shared packages
+├── turbo.json          # Turborepo configuration
+└── package.json        # Root package.json
+```
+
+## Architecture
+
+This project uses Module Federation to share code between micro-frontends at runtime.
+
+- **Shell**: The host application that loads and orchestrates remotes
+- **Remotes**: Independent micro-frontends that expose components to the shell
+
+## Learn More
+
+- [Module Federation Documentation](https://module-federation.io/)
+- [Turborepo Documentation](https://turbo.build/repo/docs)
+- [Vite Documentation](https://vitejs.dev/)

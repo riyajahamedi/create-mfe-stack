@@ -1,0 +1,35 @@
+{
+  "name": "create-mfe-stack-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monorepo for create-mfe-stack - CLI to scaffold production-ready micro-frontend architectures",
+  "keywords": [
+    "micro-frontend",
+    "mfe",
+    "module-federation",
+    "cli",
+    "scaffold",
+    "react",
+    "vue",
+    "monorepo"
+  ],
+  "license": "MIT",
+  "author": "",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.7.0",
+    "turbo": "^2.3.3",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@mfe-stack/core",
+  "version": "0.1.0",
+  "description": "Runtime orchestrator for micro-frontend applications",
+  "keywords": [
+    "micro-frontend",
+    "mfe",
+    "module-federation",
+    "runtime"
+  ],
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
