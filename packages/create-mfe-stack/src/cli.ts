@@ -33,7 +33,7 @@ program
 
       await generateProject({
         ...answers,
-        skipInstall: options.skipInstall,
+        skipInstall: options.skipInstall ?? false,
         initGit: options.git !== false,
       });
 
@@ -46,7 +46,9 @@ program
       console.log('  Next steps:');
       console.log();
       console.log(pc.cyan(`    cd ${answers.projectName}`));
-      console.log(pc.cyan(`    ${installCmd}`));
+      if (options.skipInstall) {
+        console.log(pc.cyan(`    ${installCmd}`));
+      }
       console.log(pc.cyan(`    ${devCmd}`));
       console.log();
     } catch (error) {

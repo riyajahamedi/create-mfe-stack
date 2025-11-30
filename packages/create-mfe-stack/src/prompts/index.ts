@@ -1,17 +1,17 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import validatePackageName from 'validate-npm-package-name';
-import { projectTypePrompt, type ProjectType } from './projectType.js';
-import { frameworkPrompt, type Framework } from './framework.js';
-import { featuresPrompt, type Features } from './features.js';
+import { projectTypePrompt } from './projectType.js';
+import { frameworkPrompt } from './framework.js';
+import { featuresPrompt } from './features.js';
+import type {
+  ProjectConfig,
+  ProjectType,
+  Framework,
+  Features,
+} from '../types.js';
 
-export interface ProjectConfig {
-  projectName: string;
-  projectType: ProjectType;
-  framework: Framework;
-  features: Features;
-  packageManager: 'pnpm' | 'npm' | 'yarn';
-}
+export type { ProjectConfig };
 
 export async function runPrompts(
   initialProjectName?: string
