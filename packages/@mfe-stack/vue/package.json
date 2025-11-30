@@ -1,12 +1,12 @@
 {
-  "name": "@mfe-stack/core",
+  "name": "@mfe-stack/vue",
   "version": "0.1.0",
-  "description": "Type-safe state bridge for micro-frontend communication",
+  "description": "Vue composables for @mfe-stack/core state bridge",
   "keywords": [
     "micro-frontend",
     "mfe",
-    "module-federation",
-    "runtime",
+    "vue",
+    "composables",
     "state-management"
   ],
   "license": "MIT",
@@ -27,20 +27,19 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "zod": "^3.23.8"
+    "@mfe-stack/core": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "vitest": "^2.1.0"
+    "vue": "^3.4.0"
   },
   "peerDependencies": {
-    "zod": "^3.0.0"
+    "@mfe-stack/core": "^0.1.0",
+    "vue": ">=3.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

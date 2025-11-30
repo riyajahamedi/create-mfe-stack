@@ -1,24 +1,15 @@
 /**
  * @mfe-stack/core
  *
- * Runtime orchestrator for micro-frontend applications.
- * This package provides utilities for managing micro-frontend lifecycle,
- * communication, and state sharing between shell and remote applications.
+ * Type-safe state bridge for micro-frontend communication.
+ * This package provides utilities for managing state sharing,
+ * event communication, and data synchronization between micro-frontends.
  *
  * @packageDocumentation
  */
 
-/**
- * Placeholder for future implementation.
- * Phase 2 will include:
- * - MFE registration and discovery
- * - Inter-MFE communication
- * - Shared state management
- * - Error boundary utilities
- */
+export { createBridge, type Bridge, type BridgeConfig } from './bridge.js';
+export { createStore, type Store, type StoreConfig } from './store.js';
+export { createEventBus, type EventBus } from './event-bus.js';
 
 export const version = '0.1.0';
-
-export function placeholder(): string {
-  return 'Coming soon in Phase 2';
-}
