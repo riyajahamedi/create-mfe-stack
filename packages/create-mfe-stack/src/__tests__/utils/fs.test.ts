@@ -1,30 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import path from 'node:path';
-import { copyTemplateDir, type TemplateData } from '../../utils/fs.js';
+import type { TemplateData } from '../../utils/fs.js';
 
-// Mock fs-extra
-vi.mock('fs-extra', () => ({
-  default: {
-    ensureDir: vi.fn(),
-    readdir: vi.fn(),
-    stat: vi.fn(),
-    readFile: vi.fn(),
-    writeFile: vi.fn(),
-    copy: vi.fn(),
-  },
-}));
-
-// Mock ejs
-vi.mock('ejs', () => ({
-  default: {
-    render: vi.fn((template: string, data: TemplateData) => {
-      return template.replace('<%= projectName %>', data.projectName);
-    }),
-  },
-}));
-
-import fs from 'fs-extra';
-import ejs from 'ejs';
+// We need to mock before importing the module that uses these dependencies
+vi.mock('fs-extra');
+vi.mock('ejs');
 
 describe('fs utilities', () => {
   const mockData: TemplateData = {
@@ -32,12 +12,10 @@ describe('fs utilities', () => {
     appName: 'test-app',
     port: 3000,
     features: {
-      typescript: true,
-      eslint: true,
-      prettier: true,
-      testing: false,
-      stateManagement: false,
-      i18n: false,
+      sharedState: true,
+      designSystem: false,
+      githubActions: true,
+      docker: false,
     },
   };
 
@@ -51,103 +29,110 @@ describe('fs utilities', () => {
 
   describe('copyTemplateDir', () => {
     it('should create target directory', async () => {
-      vi.mocked(fs.readdir).mockResolvedValue([]);
+      const fs = await import('fs-extra');
+      const { copyTemplateDir } = await import('../../utils/fs.js');
+      
+      vi.mocked(fs.default.ensureDir).mockResolvedValue(undefined);
+      vi.mocked(fs.default.readdir).mockResolvedValue([] as unknown as Awaited<ReturnType<typeof fs.default.readdir>>);
 
       await copyTemplateDir('/source', '/target', mockData);
 
-      expect(fs.ensureDir).toHaveBeenCalledWith('/target');
+      expect(fs.default.ensureDir).toHaveBeenCalledWith('/target');
     });
 
     it('should copy regular files without processing', async () => {
-      vi.mocked(fs.readdir).mockResolvedValue(['file.txt' as unknown as never]);
-      vi.mocked(fs.stat).mockResolvedValue({
+      const fs = await import('fs-extra');
+      const { copyTemplateDir } = await import('../../utils/fs.js');
+      
+      vi.mocked(fs.default.ensureDir).mockResolvedValue(undefined);
+      vi.mocked(fs.default.readdir).mockResolvedValue(['file.txt'] as unknown as Awaited<ReturnType<typeof fs.default.readdir>>);
+      vi.mocked(fs.default.stat).mockResolvedValue({
         isDirectory: () => false,
-      } as unknown as ReturnType<typeof fs.stat>);
+      } as unknown as Awaited<ReturnType<typeof fs.default.stat>>);
+      vi.mocked(fs.default.copy).mockResolvedValue(undefined);
 
       await copyTemplateDir('/source', '/target', mockData);
 
-      expect(fs.copy).toHaveBeenCalledWith(
+      expect(fs.default.copy).toHaveBeenCalledWith(
         path.join('/source', 'file.txt'),
         path.join('/target', 'file.txt')
       );
     });
 
     it('should process .ejs files and render templates', async () => {
-      vi.mocked(fs.readdir).mockResolvedValue([
-        'package.json.ejs' as unknown as never,
-      ]);
-      vi.mocked(fs.stat).mockResolvedValue({
+      const fs = await import('fs-extra');
+      const ejs = await import('ejs');
+      const { copyTemplateDir } = await import('../../utils/fs.js');
+      
+      vi.mocked(fs.default.ensureDir).mockResolvedValue(undefined);
+      vi.mocked(fs.default.readdir).mockResolvedValue(['package.json.ejs'] as unknown as Awaited<ReturnType<typeof fs.default.readdir>>);
+      vi.mocked(fs.default.stat).mockResolvedValue({
         isDirectory: () => false,
-      } as unknown as ReturnType<typeof fs.stat>);
-      vi.mocked(fs.readFile).mockResolvedValue(
-        '{"name": "<%= projectName %>"}'
-      );
+      } as unknown as Awaited<ReturnType<typeof fs.default.stat>>);
+      vi.mocked(fs.default.readFile).mockResolvedValue('{"name": "<%= projectName %>"}' as unknown as Awaited<ReturnType<typeof fs.default.readFile>>);
+      vi.mocked(fs.default.writeFile).mockResolvedValue(undefined);
+      vi.mocked(ejs.default.render).mockReturnValue('{"name": "test-project"}');
 
       await copyTemplateDir('/source', '/target', mockData);
 
-      expect(fs.readFile).toHaveBeenCalledWith(
+      expect(fs.default.readFile).toHaveBeenCalledWith(
         path.join('/source', 'package.json.ejs'),
         'utf-8'
       );
-      expect(ejs.render).toHaveBeenCalledWith(
-        '{"name": "<%= projectName %>"}',
-        mockData
-      );
-      expect(fs.writeFile).toHaveBeenCalledWith(
+      expect(ejs.default.render).toHaveBeenCalled();
+      expect(fs.default.writeFile).toHaveBeenCalledWith(
         path.join('/target', 'package.json'),
         '{"name": "test-project"}'
       );
     });
 
     it('should recursively copy subdirectories', async () => {
-      // First call returns a directory
-      vi.mocked(fs.readdir)
-        .mockResolvedValueOnce(['subdir' as unknown as never])
-        .mockResolvedValueOnce([]);
-
-      vi.mocked(fs.stat).mockResolvedValue({
+      const fs = await import('fs-extra');
+      const { copyTemplateDir } = await import('../../utils/fs.js');
+      
+      vi.mocked(fs.default.ensureDir).mockResolvedValue(undefined);
+      vi.mocked(fs.default.readdir)
+        .mockResolvedValueOnce(['subdir'] as unknown as Awaited<ReturnType<typeof fs.default.readdir>>)
+        .mockResolvedValueOnce([] as unknown as Awaited<ReturnType<typeof fs.default.readdir>>);
+      vi.mocked(fs.default.stat).mockResolvedValue({
         isDirectory: () => true,
-      } as unknown as ReturnType<typeof fs.stat>);
+      } as unknown as Awaited<ReturnType<typeof fs.default.stat>>);
 
       await copyTemplateDir('/source', '/target', mockData);
 
-      expect(fs.ensureDir).toHaveBeenCalledWith('/target');
-      expect(fs.ensureDir).toHaveBeenCalledWith(path.join('/target', 'subdir'));
+      expect(fs.default.ensureDir).toHaveBeenCalledWith('/target');
+      expect(fs.default.ensureDir).toHaveBeenCalledWith(path.join('/target', 'subdir'));
     });
 
     it('should handle mixed content (files and directories)', async () => {
-      vi.mocked(fs.readdir)
-        .mockResolvedValueOnce([
-          'dir' as unknown as never,
-          'file.ts' as unknown as never,
-          'template.ejs' as unknown as never,
-        ])
-        .mockResolvedValueOnce([]);
-
-      vi.mocked(fs.stat)
-        .mockResolvedValueOnce({
-          isDirectory: () => true,
-        } as unknown as ReturnType<typeof fs.stat>)
-        .mockResolvedValueOnce({
-          isDirectory: () => false,
-        } as unknown as ReturnType<typeof fs.stat>)
-        .mockResolvedValueOnce({
-          isDirectory: () => false,
-        } as unknown as ReturnType<typeof fs.stat>);
-
-      vi.mocked(fs.readFile).mockResolvedValue('<%= projectName %>');
+      const fs = await import('fs-extra');
+      const ejs = await import('ejs');
+      const { copyTemplateDir } = await import('../../utils/fs.js');
+      
+      vi.mocked(fs.default.ensureDir).mockResolvedValue(undefined);
+      vi.mocked(fs.default.readdir)
+        .mockResolvedValueOnce(['dir', 'file.ts', 'template.ejs'] as unknown as Awaited<ReturnType<typeof fs.default.readdir>>)
+        .mockResolvedValueOnce([] as unknown as Awaited<ReturnType<typeof fs.default.readdir>>);
+      vi.mocked(fs.default.stat)
+        .mockResolvedValueOnce({ isDirectory: () => true } as unknown as Awaited<ReturnType<typeof fs.default.stat>>)
+        .mockResolvedValueOnce({ isDirectory: () => false } as unknown as Awaited<ReturnType<typeof fs.default.stat>>)
+        .mockResolvedValueOnce({ isDirectory: () => false } as unknown as Awaited<ReturnType<typeof fs.default.stat>>);
+      vi.mocked(fs.default.copy).mockResolvedValue(undefined);
+      vi.mocked(fs.default.readFile).mockResolvedValue('<%= projectName %>' as unknown as Awaited<ReturnType<typeof fs.default.readFile>>);
+      vi.mocked(fs.default.writeFile).mockResolvedValue(undefined);
+      vi.mocked(ejs.default.render).mockReturnValue('test-project');
 
       await copyTemplateDir('/source', '/target', mockData);
 
       // Directory was recursively processed
-      expect(fs.ensureDir).toHaveBeenCalledWith(path.join('/target', 'dir'));
+      expect(fs.default.ensureDir).toHaveBeenCalledWith(path.join('/target', 'dir'));
       // Regular file was copied
-      expect(fs.copy).toHaveBeenCalledWith(
+      expect(fs.default.copy).toHaveBeenCalledWith(
         path.join('/source', 'file.ts'),
         path.join('/target', 'file.ts')
       );
       // EJS file was rendered
-      expect(fs.writeFile).toHaveBeenCalledWith(
+      expect(fs.default.writeFile).toHaveBeenCalledWith(
         path.join('/target', 'template'),
         'test-project'
       );

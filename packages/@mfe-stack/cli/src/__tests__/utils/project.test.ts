@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import path from 'path';
 
 // Mock external dependencies
 vi.mock('find-up', () => ({
@@ -19,6 +18,11 @@ import { findUp } from 'find-up';
 import fs from 'fs-extra';
 import { detectProject, getApps } from '../../utils/project.js';
 import type { MfeProject } from '../../types.js';
+
+// Type helper for fs-extra mocks
+type PathExistsResult = Awaited<ReturnType<typeof fs.pathExists>>;
+type ReaddirResult = Awaited<ReturnType<typeof fs.readdir>>;
+type ReadFileResult = Awaited<ReturnType<typeof fs.readFile>>;
 
 describe('project utilities', () => {
   beforeEach(() => {
@@ -40,7 +44,7 @@ describe('project utilities', () => {
 
     it('should return null when turbo.json exists but no apps directory', async () => {
       vi.mocked(findUp).mockResolvedValue('/project/turbo.json');
-      vi.mocked(fs.pathExists).mockResolvedValue(false);
+      vi.mocked(fs.pathExists).mockResolvedValue(false as unknown as PathExistsResult);
 
       const result = await detectProject();
 
@@ -50,9 +54,9 @@ describe('project utilities', () => {
     it('should detect pnpm as package manager', async () => {
       vi.mocked(findUp).mockResolvedValue('/project/turbo.json');
       vi.mocked(fs.pathExists)
-        .mockResolvedValueOnce(true) // apps directory
-        .mockResolvedValueOnce(true) // pnpm-lock.yaml
-        .mockResolvedValueOnce(false); // yarn.lock
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // apps directory
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // pnpm-lock.yaml
+        .mockResolvedValueOnce(false as unknown as PathExistsResult); // yarn.lock
 
       const result = await detectProject();
 
@@ -66,9 +70,9 @@ describe('project utilities', () => {
     it('should detect yarn as package manager', async () => {
       vi.mocked(findUp).mockResolvedValue('/project/turbo.json');
       vi.mocked(fs.pathExists)
-        .mockResolvedValueOnce(true) // apps directory
-        .mockResolvedValueOnce(false) // pnpm-lock.yaml
-        .mockResolvedValueOnce(true); // yarn.lock
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // apps directory
+        .mockResolvedValueOnce(false as unknown as PathExistsResult) // pnpm-lock.yaml
+        .mockResolvedValueOnce(true as unknown as PathExistsResult); // yarn.lock
 
       const result = await detectProject();
 
@@ -82,9 +86,9 @@ describe('project utilities', () => {
     it('should default to npm as package manager', async () => {
       vi.mocked(findUp).mockResolvedValue('/project/turbo.json');
       vi.mocked(fs.pathExists)
-        .mockResolvedValueOnce(true) // apps directory
-        .mockResolvedValueOnce(false) // pnpm-lock.yaml
-        .mockResolvedValueOnce(false); // yarn.lock
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // apps directory
+        .mockResolvedValueOnce(false as unknown as PathExistsResult) // pnpm-lock.yaml
+        .mockResolvedValueOnce(false as unknown as PathExistsResult); // yarn.lock
 
       const result = await detectProject();
 
@@ -104,7 +108,7 @@ describe('project utilities', () => {
     };
 
     it('should return empty array when apps directory does not exist', async () => {
-      vi.mocked(fs.pathExists).mockResolvedValue(false);
+      vi.mocked(fs.pathExists).mockResolvedValue(false as unknown as PathExistsResult);
 
       const result = await getApps(mockProject);
 
@@ -113,13 +117,13 @@ describe('project utilities', () => {
 
     it('should detect shell app correctly', async () => {
       vi.mocked(fs.pathExists)
-        .mockResolvedValueOnce(true) // apps directory
-        .mockResolvedValueOnce(true) // package.json
-        .mockResolvedValueOnce(true); // vite.config.ts
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // apps directory
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // package.json
+        .mockResolvedValueOnce(true as unknown as PathExistsResult); // vite.config.ts
 
       vi.mocked(fs.readdir).mockResolvedValue([
         { name: 'shell', isDirectory: () => true },
-      ] as unknown as ReturnType<typeof fs.readdir>);
+      ] as unknown as ReaddirResult);
 
       vi.mocked(fs.readJson).mockResolvedValue({
         name: '@project/shell',
@@ -132,7 +136,7 @@ describe('project utilities', () => {
           server: { port: 3000 },
           plugins: [federation({ remotes: {} })]
         });
-      `);
+      ` as unknown as ReadFileResult);
 
       const result = await getApps(mockProject);
 
@@ -146,13 +150,13 @@ describe('project utilities', () => {
 
     it('should detect Vue framework from dependencies', async () => {
       vi.mocked(fs.pathExists)
-        .mockResolvedValueOnce(true) // apps directory
-        .mockResolvedValueOnce(true) // package.json
-        .mockResolvedValueOnce(true); // vite.config.ts
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // apps directory
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // package.json
+        .mockResolvedValueOnce(true as unknown as PathExistsResult); // vite.config.ts
 
       vi.mocked(fs.readdir).mockResolvedValue([
         { name: 'remote-vue', isDirectory: () => true },
-      ] as unknown as ReturnType<typeof fs.readdir>);
+      ] as unknown as ReaddirResult);
 
       vi.mocked(fs.readJson).mockResolvedValue({
         name: '@project/remote-vue',
@@ -164,7 +168,7 @@ describe('project utilities', () => {
         export default defineConfig({
           server: { port: 3002 },
         });
-      `);
+      ` as unknown as ReadFileResult);
 
       const result = await getApps(mockProject);
 
@@ -179,24 +183,24 @@ describe('project utilities', () => {
 
     it('should sort apps by port', async () => {
       vi.mocked(fs.pathExists)
-        .mockResolvedValueOnce(true) // apps directory
-        .mockResolvedValueOnce(true) // package.json app1
-        .mockResolvedValueOnce(true) // vite.config.ts app1
-        .mockResolvedValueOnce(true) // package.json app2
-        .mockResolvedValueOnce(true); // vite.config.ts app2
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // apps directory
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // package.json app1
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // vite.config.ts app1
+        .mockResolvedValueOnce(true as unknown as PathExistsResult) // package.json app2
+        .mockResolvedValueOnce(true as unknown as PathExistsResult); // vite.config.ts app2
 
       vi.mocked(fs.readdir).mockResolvedValue([
         { name: 'remote-b', isDirectory: () => true },
         { name: 'shell', isDirectory: () => true },
-      ] as unknown as ReturnType<typeof fs.readdir>);
+      ] as unknown as ReaddirResult);
 
       vi.mocked(fs.readJson)
         .mockResolvedValueOnce({ name: 'remote-b', dependencies: {} })
         .mockResolvedValueOnce({ name: 'shell', dependencies: {} });
 
       vi.mocked(fs.readFile)
-        .mockResolvedValueOnce('server: { port: 3002 }')
-        .mockResolvedValueOnce('server: { port: 3000, remotes: {} }');
+        .mockResolvedValueOnce('server: { port: 3002 }' as unknown as ReadFileResult)
+        .mockResolvedValueOnce('server: { port: 3000, remotes: {} }' as unknown as ReadFileResult);
 
       const result = await getApps(mockProject);
 
@@ -204,12 +208,12 @@ describe('project utilities', () => {
     });
 
     it('should skip non-directory entries', async () => {
-      vi.mocked(fs.pathExists).mockResolvedValueOnce(true);
+      vi.mocked(fs.pathExists).mockResolvedValueOnce(true as unknown as PathExistsResult);
 
       vi.mocked(fs.readdir).mockResolvedValue([
         { name: 'README.md', isDirectory: () => false },
         { name: '.gitkeep', isDirectory: () => false },
-      ] as unknown as ReturnType<typeof fs.readdir>);
+      ] as unknown as ReaddirResult);
 
       const result = await getApps(mockProject);
 

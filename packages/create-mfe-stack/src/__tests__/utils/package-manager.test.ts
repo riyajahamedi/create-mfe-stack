@@ -3,7 +3,6 @@ import {
   detectPackageManager,
   getInstallCommand,
   getRunCommand,
-  installDependencies,
 } from '../../utils/package-manager.js';
 
 describe('package-manager utilities', () => {
