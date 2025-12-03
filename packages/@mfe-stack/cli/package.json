@@ -10,7 +10,19 @@
     "module-federation"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "riyajahamedi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riyajahamedi/create-mfe-stack.git",
+    "directory": "packages/@mfe-stack/cli"
+  },
+  "homepage": "https://github.com/riyajahamedi/create-mfe-stack#readme",
+  "bugs": {
+    "url": "https://github.com/riyajahamedi/create-mfe-stack/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "bin": {
     "mfe": "./dist/index.js",
@@ -31,6 +43,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -45,7 +59,8 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.11.16",
     "tsup": "^8.0.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^2.1.0"
   },
   "engines": {
     "node": ">=18.0.0"

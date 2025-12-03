@@ -10,7 +10,19 @@
     "state-management"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "riyajahamedi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riyajahamedi/create-mfe-stack.git",
+    "directory": "packages/@mfe-stack/core"
+  },
+  "homepage": "https://github.com/riyajahamedi/create-mfe-stack#readme",
+  "bugs": {
+    "url": "https://github.com/riyajahamedi/create-mfe-stack/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "exports": {
     ".": {

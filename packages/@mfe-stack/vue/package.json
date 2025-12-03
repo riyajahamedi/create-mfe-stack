@@ -10,7 +10,19 @@
     "state-management"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "riyajahamedi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riyajahamedi/create-mfe-stack.git",
+    "directory": "packages/@mfe-stack/vue"
+  },
+  "homepage": "https://github.com/riyajahamedi/create-mfe-stack#readme",
+  "bugs": {
+    "url": "https://github.com/riyajahamedi/create-mfe-stack/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "exports": {
     ".": {
@@ -27,14 +39,20 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "@mfe-stack/core": "workspace:*"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "@vue/test-utils": "^2.4.0",
+    "jsdom": "^25.0.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
+    "vitest": "^2.1.0",
     "vue": "^3.4.0"
   },
   "peerDependencies": {
