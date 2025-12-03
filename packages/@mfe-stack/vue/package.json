@@ -1,6 +1,6 @@
 {
   "name": "@mfe-stack/vue",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Vue composables for @mfe-stack/core state bridge",
   "keywords": [
     "micro-frontend",
@@ -56,7 +56,7 @@
     "vue": "^3.4.0"
   },
   "peerDependencies": {
-    "@mfe-stack/core": "^0.1.0",
+    "@mfe-stack/core": "^0.2.0",
     "vue": ">=3.0.0"
   },
   "engines": {
