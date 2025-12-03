@@ -1,0 +1,37 @@
+{
+  "name": "@mfe-stack/devtools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DevTools browser extension for debugging micro-frontend apps built with create-mfe-stack",
+  "keywords": [
+    "micro-frontend",
+    "mfe",
+    "devtools",
+    "browser-extension",
+    "chrome-extension"
+  ],
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.260",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
