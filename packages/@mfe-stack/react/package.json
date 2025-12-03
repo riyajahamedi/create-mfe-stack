@@ -1,6 +1,6 @@
 {
   "name": "@mfe-stack/react",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "React hooks for @mfe-stack/core state bridge",
   "keywords": [
     "micro-frontend",
@@ -57,7 +57,7 @@
     "vitest": "^2.1.0"
   },
   "peerDependencies": {
-    "@mfe-stack/core": "^0.1.0",
+    "@mfe-stack/core": "^0.2.0",
     "react": ">=17.0.0"
   },
   "engines": {

@@ -1,6 +1,6 @@
 {
   "name": "@mfe-stack/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Type-safe state bridge for micro-frontend communication",
   "keywords": [
     "micro-frontend",
